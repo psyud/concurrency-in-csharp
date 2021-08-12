@@ -11,7 +11,9 @@ namespace ProcessAsTasksComplete
             Console.WriteLine("Hello World!");
             var p = new Program();
 
+            Console.WriteLine("Wrong way:");
             p.ProcessAsTasksCompleteTheWrongWay().GetAwaiter().GetResult();
+            Console.WriteLine("Right way:");
             p.ProcessAsTasksCompleteTheRightWay().GetAwaiter().GetResult();
         }
 
@@ -24,6 +26,8 @@ namespace ProcessAsTasksComplete
             var tasks = new[] { task1, task2, task3 };
             var processingTasks = tasks.Select(t => HandleAsync(t));
 
+            // This waits for all tasks to complete then collects the results
+            // So task3 completes first, 1 is collected, then 2 is collected, then 3 is collected, and so on
             await Task.WhenAll(processingTasks.ToArray());
         }
 
@@ -52,7 +56,7 @@ namespace ProcessAsTasksComplete
 
         async Task<int> DelayAndReturnAsync(int x)
         {
-            await Task.Delay(x);
+            await Task.Delay(TimeSpan.FromSeconds(x));
             return x;
         }
     }
